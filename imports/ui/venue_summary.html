@@ -1,0 +1,19 @@
+<template name="venuesummary">
+  <tr>
+     <td><a href="details/{{_id}}"><strong>{{name}}</strong></a></td>
+     <td>{{description}}</td>
+         {{>venuesummarytemplatedata}}
+  </tr>
+</template>
+
+<template name="venuesummarytemplatedata">
+        {{#with thisVenue}}
+  	<td>{{people}}</td>
+	<td>{{meanSnd}}</td>
+	<td>{{temp}}</td>
+{{/with}}
+        
+
+
+	
+</template>
