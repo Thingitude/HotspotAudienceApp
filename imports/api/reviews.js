@@ -15,22 +15,29 @@ if (Meteor.isServer) {
 }
  
 Meteor.methods({
-  'reviews.insert'(title,details, 
+  'reviews.insert'(details, 
       venueId, rating) {
     console.log("run reviews.insert");
-    check(title, String);
+    var score = parseInt(rating);
+    check(rating, String);
  
     // Make sure the user is logged in before inserting a task
     if (! this.userId) {
       throw new Meteor.Error('not-authorized');
     }
- 
+    if (score > 5){
+      throw new Meteor.Error('number too large');
+    }
+    if (score < 1){
+      throw new Meteor.Error('number too low');
+    }
+
     Reviews.insert({
-      title, 
       details, 
       venueId, 
-      rating, 
+      score, 
       owner: this.userId,
+      timestamp: new Date(),
       username: Meteor.users.findOne(this.userId).username,
     });
   },

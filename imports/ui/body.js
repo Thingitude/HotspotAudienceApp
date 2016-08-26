@@ -9,12 +9,7 @@ import { Reviews } from '../api/reviews.js';
  
 import './venue.js';
 import './body.html';
-
-test = SensorData;
-test2 = Venues;
-test3 = Events;
-test4 = Reviews;
-
+import './map.js';
 
 Meteor.startup(function() {  
   
@@ -23,14 +18,13 @@ Meteor.startup(function() {
 Template.body.onCreated(function bodyOnCreated() {
   this.state = new ReactiveDict();
   Meteor.subscribe('venues');
-  Meteor.subscribe('sensorData');
   Meteor.subscribe('events');
   Meteor.subscribe('reviews');
+  Meteor.subscribe('sensorData');
 });
 
 Template.VenueList.helpers({
   venues() {
-    //console.log("body.js venuesssummary helper");
     return Venues.find();
   },
   incompleteCount() {
@@ -42,7 +36,6 @@ Template.VenueList.helpers({
 Template.Venue.helpers({
   thisVenue() {
     const venueId=FlowRouter.getParam("venueId");
-    // console.log(venueId);
     return Venues.findOne({"_id": venueId});
   }
 });
@@ -52,25 +45,18 @@ Template.datapacket.helpers({
   thisVenue() {
     const venueId=FlowRouter.getParam("venueId");
     datapackettemp = datapackettemp + 1;
-    console.log(datapackettemp);
-    console.log(test.find({"sensorId":test2.findOne({"_id": venueId}).sensorId}).fetch()[datapackettemp-1]);
-    if(test.find({"sensorId":test2.findOne({"_id": venueId}).sensorId}).fetch()[datapackettemp-1] === undefined)
+    if(SensorData.find({"sensorId":Venues.findOne({"_id": venueId}).sensorId}).fetch()[datapackettemp-1] === undefined)
 	{
 		return 0;
 	}
-    return test.find({"sensorId":test2.findOne({"_id": venueId}).sensorId}).fetch()[datapackettemp-1];
-
-    //Useful
-    //test.find({"sensorId":"0004A30B001B67C9"}).fetch()
-//    return Venues.find({"_id": "ZzwCsxZHFRQDiXtiF"});
-    //return Venues.findOne({"_id": venueId});
+    return SensorData.find({"sensorId":Venues.findOne({"_id": venueId}).sensorId}).fetch()[datapackettemp-1];
   }
 });
 
 Template.venuesummarytemplatedata.helpers({
   thisVenue() {
     const venueId=this._id;
-    var array = test.find({"sensorId":test2.findOne({"_id": venueId}).sensorId}).fetch();
+    var array = SensorData.find({"sensorId":Venues.findOne({"_id": venueId}).sensorId}).fetch();
     return array[array.length - 1];
   }
 })
@@ -79,42 +65,66 @@ Template.DetailsView.helpers({
   sensorData() {
 	 const venueId=FlowRouter.getParam("venueId");
          datapackettemp = 0;
-    //console.log(test.find({"sensorId":test2.findOne({"_id": venueId}).sensorId}));;
-	//return preloaded
-    return test.find({"sensorId":test2.findOne({"_id": venueId}).sensorId});
+    return SensorData.find({"sensorId":Venues.findOne({"_id": venueId}).sensorId});
+  
+    
   },
   events() {
+  
   const venueId=FlowRouter.getParam("venueId");
-   return test3.find({"venueId":venueId});
+   var temp = Events.find({"venueId":venueId}).fetch();
+   var bubble;
+    for(var i = 0;i < temp.length;i++)
+       {
+		for(var i2 = 0;i2 < temp.length - 1;i2++)
+		   {
+			if(temp[i2].startDateTime - temp[i2+1].startDateTime > 0)
+                          {
+			  	bubble = temp[i2+1];
+				temp[i2+1] = temp[i2];
+ 				temp[i2] = bubble;
+				
+                          }
+		   }
+       }
+    return temp;
+  },
+  reviews() {
+    const venueId=FlowRouter.getParam("venueId");
+    var temp = {score : arrayavg(Reviews.find({"venueId":venueId}).fetch()),
+                reviewcount : Reviews.find().fetch().length};
+    if(isNaN(temp.score))
+      {
+	temp.score = 0;
+      }
+    return temp;
   },
   thisVenue() {
     const venueId=FlowRouter.getParam("venueId");
-     // sensordata;
-
-
-    //Useful
-    //test.find({"sensorId":"0004A30B001B67C9"}).fetch()
-    //sensordata
-//    return Venues.find({"_id": "ZzwCsxZHFRQDiXtiF"});
+     var avg = 0;
+     var tot = 0;
+     for(var i = 0;i < Reviews.find().fetch().length;i++)
+	{
+            tot = Reviews.find().fetch()[i].score + tot;
+        }
+     avg = tot / Reviews.find().fetch().length;
     return Venues.findOne({"_id": venueId});
   }
 });
 
 Template.AddReview.events({
   'submit .add-review'(event) {
-    console.log("Save me!")
     // Prevent default browser form submit
     event.preventDefault();
  
     // Get value from form element
     const target = event.target;
-    const reviewTitle = target.reviewTitle.value;
     const reviewDetails = target.reviewDetails.value;
     const reviewRating = target.reviewRating.value;
     const reviewvenueId = FlowRouter.getParam("venueId");
 
     // Insert a venue into the collection
-    Meteor.call('reviews.insert', reviewTitle, reviewDetails, 
+    Meteor.call('reviews.insert', reviewDetails, 
       reviewvenueId, reviewRating);
     // Clear form
     //target.text.value = '';
@@ -124,7 +134,6 @@ Template.AddReview.events({
 
 Template.DetailsView.events({
   'submit .edit-venue'(event) {
-    //console.log("Save me!")
     // Prevent default browser form submit
     event.preventDefault();
     
@@ -150,83 +159,19 @@ Template.DetailsView.events({
   },
 });
 
-Template.MapView.helpers({  
-  mapOptions: function() {
-    if (GoogleMaps.loaded()) {
-	
-      return {
-        //center: new google.maps.LatLng(51.4530493, -0.9698146),
-	center: new google.maps.LatLng(51.4530493, -0.9698146),
-        zoom: 15
-      };
-    }
-  }
-  
-});
-
-
-maphandler = function()
-{	
-	GoogleMaps.ready('map', function(map) {	
-	venuedata = Venues.find().fetch();
-	for(var i = 0;i < venuedata.length;i++)
-	{
-		//console.log(venuedata[i].latitude + "," + venuedata[i].longitude);
-		 var marker = new google.maps.Marker({
-      draggable: false,
-      animation: google.maps.Animation.DROP,
-      position: new google.maps.LatLng(venuedata[i].latitude, venuedata[i].longitude),
-      map: map.instance,
-      id: document._id,
-      infowindow: new google.maps.InfoWindow({content: "<h1>" + venuedata[i].name + "</h1>" + "<p>" + venuedata[i].description + "</p><a href=/details/" + venuedata[i]._id +"/ >Show More</a>"})
-	
-         });
-	
-	 marker.addListener('click', function() { 
-	       
-               this.infowindow.open(GoogleMaps.maps.map.instance, marker);
-               GoogleMaps.maps.map.instance.panTo(new google.maps.LatLng(51.4530493, -0.9698146));
-	       
-               
-         
-        });
-        
-   
-	}
-    google.maps.event.addListener(map.instance, 'click', function(event) {
-	alert(event.latLng.lat() + "," + event.latLng.lng()); 
-        GoogleMaps.maps.map.instance.panTo(new google.maps.LatLng(51.4530493, -0.9698146));
-	for(var i = 0;i < venuedata.length;i++)
-	{
-		
-		if((venuedata[i].latitude - event.latLng.lat()) * (venuedata[i].latitude - event.latLng.lat()) < 0.0000005)
-		{
-			if((venuedata[i].longitude - event.latLng.lng()) * (venuedata[i].longitude - event.latLng.lng()) < 0.0000005)
-		{
-			
-
-	  i
-		}	
-		}
-	
-
-
-	}
-    });
-
-
-  });
-
-};
-
-
 
 Template.DetailsView.onCreated(function(){
+	
 });
 
+arrayavg = function(data){
+var sum = 0;
+for(var i = 0;i < data.length;i++)
+{
+	sum = sum + data[i].score;
 
-Template.MapView.onCreated(function(){
-maphandler();
-GoogleMaps.load({ key: 'AIzaSyAoa0T7bQBwDRH-C3jx2QUj4_Se-g2RPLg'});
-});
+}
+return sum / data.length;
+
+};
 
