@@ -18,8 +18,8 @@ Meteor.methods({
   'reviews.insert'(details, 
       venueId, rating) {
     console.log("run reviews.insert");
-    var score = parseInt(rating);
-    check(rating, String);
+    var score = rating;
+    //check(rating, String);
  
     // Make sure the user is logged in before inserting a task
     if (! this.userId) {

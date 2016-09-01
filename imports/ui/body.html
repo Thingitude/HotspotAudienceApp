@@ -2,13 +2,17 @@
   <body>
     <div class="container-fluid">
       <header>
-        <h1>Hotspot Audience {{incompleteCount}}</h1>
-   
-        {{> loginButtons}}
-   
+         <div>
+          <img src="/Hotspot_250.png" />
+          <img class="pull-right" src="/ryoc2016_150.png" />
+          <div class="col-sm-offset-4">
+            {{> loginButtons}}
+          </div>
+          </div>
       </header>
       <main>
         {{#if currentUser}}
+          <h1>  </h1>
       	  {{>tabcontrol}}
           {{>Template.dynamic template=content}}
         {{else}}
@@ -38,7 +42,7 @@
           <ul class="nav navbar-nav">
             <li><a role="button" name="listVenuesBtn" href="/list">
               <span class="glyphicon glyphicon-list" aria-hidden="true"></span> List venues</a></li>
-            <li><a role="button" name="mapVenuesBtn" href="/map?coord=51.4530493,-0.9698146">
+            <li><a role="button" name="mapVenuesBtn" href="/map?coord=51.4530493,-0.9698146" id="mapVenuesBtn">
               <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Show on map</a></li>
           </ul>
         </div>
@@ -73,12 +77,11 @@
 
 <template name="AddReview">
   <h2>Add review</h2>
-  <form class="add-review">
-    <label>Rating</label> <br/>
-    <input type="text" name="reviewRating" placeholder="1-5" /> <br/>
+  <form name="add-review" class="add-review">
+    {{> starsRating id='rating' mutable=true size=100}}
     <label>Description</label> <br/>
-    <input type="text" name="reviewDetails" placeholder="Give more details(optional)" /> <br/>
-    <input type="submit" value="Save">  <a href="/">Cancel</a>
+    <textarea form="add-review" rows="4" cols="50" id="reviewDetails"></textarea><br/>
+    <input type="submit" value="Save">  <a href="./">Cancel</a>
    </form>
  </template>
 
@@ -86,7 +89,8 @@
 
 {{#with thisVenue}}
   <h2>{{name}}</h2>
-  <h3>{{phone}}     {{#with reviews}}{{score}}/5{{/with}} </h3>
+  <h3>{{phone}}     {{#with reviews}}{{score}}/5{{/with}} <a class="btn btn-default" href="/details/{{_id}}/review" role="button">Review this venue</a> </h3>
+    <div id="infocontainer">
     <label>Description</label> <br/>
     <p>{{description}}</p> <br/>
     <label>Opening hours</label> <br/>
@@ -97,13 +101,14 @@
     <p><a href={{bookingURL}}>{{bookingURL}}</a></p> <br/>
     <label>News/Reviews</label><br/>
     <p><a href={{newsURL}}>{{newsURL}}</a></p><br/>
-    <p><a href="/details/{{_id}}/review">Review this venue</a></p><br/>
+    </div>
 {{/with}}
+<div id="eventscontainer">
     <p><h3>Events</h3></p>
  {{#each events}}
     {{>Eventsummary}}
   {{/each}}
-
+</div>
 </template>
 
 <template name="datapacket">

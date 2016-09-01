@@ -108,7 +108,9 @@ Template.DetailsView.helpers({
             tot = Reviews.find().fetch()[i].score + tot;
         }
      avg = tot / Reviews.find().fetch().length;
-    return Venues.findOne({"_id": venueId});
+    data = Venues.findOne({"_id": venueId});
+    document.getElementById('mapVenuesBtn').href = "/map?coord=" + data.latitude + ',' + data.longitude;
+    return data;
   }
 });
 
@@ -116,13 +118,12 @@ Template.AddReview.events({
   'submit .add-review'(event) {
     // Prevent default browser form submit
     event.preventDefault();
- 
     // Get value from form element
     const target = event.target;
-    const reviewDetails = target.reviewDetails.value;
-    const reviewRating = target.reviewRating.value;
+    const reviewDetails = document.getElementById('reviewDetails').value;
+    const reviewRating = $('#rating').data('userrating');
     const reviewvenueId = FlowRouter.getParam("venueId");
-
+    
     // Insert a venue into the collection
     Meteor.call('reviews.insert', reviewDetails, 
       reviewvenueId, reviewRating);
@@ -160,7 +161,8 @@ Template.DetailsView.events({
 });
 
 
-Template.DetailsView.onCreated(function(){
+Template.DetailsView.onRendered(function(){
+        
 	
 });
 

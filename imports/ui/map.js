@@ -10,7 +10,7 @@ Template.MapView.helpers({
 });
 
 Template.MapView.onCreated(function(){
-
+	
   
 });
 
@@ -53,9 +53,9 @@ initMap = function() {
             '<div id="bodyContent">'+
             '<p>' + data[i].description + '</p>' +
 	    '<p>Phone: '+ data[i].phone + '</p>' +
-            '<p>Website: <a href="'+ data[i].websiteURL + '">'+ data[i].websiteURL +"</a>" +
             '<p>Review Score: ' + avg +'/5 </p>' +
             '<p>People: ' + latest.people + ' Noise: ' + latest.meanSnd + ' Temperature: ' + latest.temp + '</p>' +
+            '<p><a href="'+ data[i].websiteURL + '" class="btn btn-default" role="button" target="new">Website</a>' +
             '<p>' + '<a href="/details/' + data[i]._id + '">' + 'More Details' +'</a></p>' +
             '</p>' +
             '</div>'+
