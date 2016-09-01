@@ -89,7 +89,7 @@
 
 {{#with thisVenue}}
   <h2>{{name}}</h2>
-  <h3>{{phone}}     {{#with reviews}}{{score}}/5{{/with}} <a class="btn btn-default" href="/details/{{_id}}/review" role="button">Review this venue</a> </h3>
+  <h3>{{phone}}   {{#with reviews}}{{> starsRating id='rating2' rating=score size=30}}{{score}}{{/with}} <a class="btn btn-default" href="/details/{{_id}}/review" role="button">Review this venue</a> </h3>
     <div id="infocontainer">
     <label>Description</label> <br/>
     <p>{{description}}</p> <br/>

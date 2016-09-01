@@ -114,6 +114,8 @@ Template.DetailsView.helpers({
   }
 });
 
+
+
 Template.AddReview.events({
   'submit .add-review'(event) {
     // Prevent default browser form submit
