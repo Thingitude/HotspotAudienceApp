@@ -1,4 +1,17 @@
- 
+#eventscontainer {
+  text-align: left; 
+  margin-left: 30%;
+  float:center;
+  height:100%;
+}
+#infocontainer {
+  text-align: left;
+  float:left;
+  width:25%;
+  margin-right:5%;
+  height: 100%;
+
+}
 #map {
   width: 100%;
   max-width: 100%;
