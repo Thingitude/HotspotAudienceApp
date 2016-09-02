@@ -56,7 +56,7 @@
     <div class="table">
     <table class="table">
       <thead>
-        <tr><th>Name</th><th>Description</th><th>People</th><th>Avg Sound level</th><th>Temperature</th><th>Details</th></tr>
+        <tr><th>Name</th><th>Description</th><th>People</th><th>Avg Sound level</th><th>Temperature</th><th>Rating</th><th>Details</th></tr>
       </thead>
       <tbody>
         {{#each venues}}
@@ -89,7 +89,7 @@
 
 {{#with thisVenue}}
   <h2>{{name}}</h2>
-  <h3>{{phone}}   {{#with reviews}}{{> starsRating id='rating2' rating=score size=30}}{{score}}{{/with}} <a class="btn btn-default" href="/details/{{_id}}/review" role="button">Review this venue</a> </h3>
+  <h3>{{phone}}   {{#with reviews}}{{> starsRating id='rating2' rating=score size=30}}{{/with}} <a class="btn btn-default" href="/details/{{_id}}/review" role="button">Review this venue</a> </h3>
     <div id="infocontainer">
     <label>Description</label> <br/>
     <p>{{description}}</p> <br/>

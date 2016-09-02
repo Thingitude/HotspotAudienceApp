@@ -6,11 +6,17 @@
   </tr>
 </template>
 
+<template name="PerformanceHelper">
+	<iframe src="" height=0 width=0 frameborder=0>
+</iframe>
+</template>
+
 <template name="venuesummarytemplatedata">
         {{#with thisVenue}}
-  	<td>{{people}}</td>
-	<td>{{meanSnd}}</td>
-	<td>{{temp}}</td>
+  	<td>{{data.people}}</td>
+	<td>{{data.meanSnd}}</td>
+	<td>{{data.temp}}</td>
+        <td>{{> starsRating id='rating2' rating=score size=10}}</td>
 {{/with}}
         
 

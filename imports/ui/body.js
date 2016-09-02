@@ -57,7 +57,15 @@ Template.venuesummarytemplatedata.helpers({
   thisVenue() {
     const venueId=this._id;
     var array = SensorData.find({"sensorId":Venues.findOne({"_id": venueId}).sensorId}).fetch();
-    return array[array.length - 1];
+    var reviewdata = Reviews.find({"venueId":venueId}).fetch();
+    var temp = {data : array[array.length - 1],
+                score : arrayavg(reviewdata),
+                reviewcount : reviewdata.length};
+    if(isNaN(temp.score))
+      {
+	temp.score = 0;
+      }
+    return temp;
   }
 })
 
