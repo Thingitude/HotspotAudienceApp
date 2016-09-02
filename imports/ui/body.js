@@ -25,6 +25,33 @@ Template.body.onCreated(function bodyOnCreated() {
 
 Template.VenueList.helpers({
   venues() {
+    if(window.location.href.split('?').length == 2)
+    {
+    	switch(window.location.href.split('?')[1])
+        {
+		case "N":
+			console.log("N");
+			return Venues.find({}, {sort: {"name": 1}});
+			break;
+		case "P":
+                        console.log("P");
+			console.log(Venues.find({}, {sort: {"People": 1}}).fetch());
+			return Venues.find({}, {sort: {"People": 1}});
+			break;
+		case "S":
+                        console.log("S");
+			return Venues.find({}, {sort: {"meanSnd": 1}});
+			break;
+		case "T":
+			console.log("T");
+			return Venues.find({}, {sort: {"Temp": 1}});
+			break;
+		case "R":
+     			console.log("R");
+			
+			break;
+	}
+    }
     return Venues.find();
   },
   incompleteCount() {
@@ -32,6 +59,28 @@ Template.VenueList.helpers({
   },
 });
 
+Template.VenueList.events({
+	'click th#headingName'(event){
+	console.log("SortBy Name");
+	window.location.assign("?N");
+	},
+        'click th#headingPeople'(event){
+	console.log("SortBy People");
+        window.location.assign("?P");
+	},
+        'click th#headingAvgsound'(event){
+	console.log("SortBy Sound");
+	window.location.assign("?S");
+	},
+        'click th#headingTemp'(event){
+	console.log("SortBy Temp");
+	window.location.assign("?T");
+	},
+        'click th#headingRating'(event){
+	console.log("SortBy Rating");
+	window.location.assign("?R");
+	}
+});
 
 Template.Venue.helpers({
   thisVenue() {
@@ -135,11 +184,18 @@ Template.AddReview.events({
     const reviewvenueId = FlowRouter.getParam("venueId");
     
     // Insert a venue into the collection
+    if(reviewDetails.length < 140)
+    {
     Meteor.call('reviews.insert', reviewDetails, 
       reviewvenueId, reviewRating);
+      window.location.assign("/");
+    }
+    else{
+	alert("Feedback too long (size limit of 140 characters)");
+    }
     // Clear form
     //target.text.value = '';
-    window.location.assign("/");
+    
   },
 });
 

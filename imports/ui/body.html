@@ -56,7 +56,7 @@
     <div class="table">
     <table class="table">
       <thead>
-        <tr><th>Name</th><th>Description</th><th>People</th><th>Avg Sound level</th><th>Temperature</th><th>Rating</th><th>Details</th></tr>
+        <tr><th id="headingName">Name</th><th>Description</th><th id="headingPeople">People</th><th id="headingAvgsound">Avg Sound level</th><th id="headingTemp">Temperature</th><th id="headingRating">Rating</th><th>Details</th></tr>
       </thead>
       <tbody>
         {{#each venues}}
@@ -95,12 +95,9 @@
     <p>{{description}}</p> <br/>
     <label>Opening hours</label> <br/>
     <p>{{openingHours}} </p> <br/>
-    <label>Website</label> <br/>
-    <p><a href={{websiteURL}}>{{websiteURL}}</a></p> <br/>
-    <label>Booking/Reservations</label> <br/>
-    <p><a href={{bookingURL}}>{{bookingURL}}</a></p> <br/>
-    <label>News/Reviews</label><br/>
-    <p><a href={{newsURL}}>{{newsURL}}</a></p><br/>
+    <a href={{websiteURL}} class="btn btn-default" role="button" target="new">Website</a> 
+    <a href={{bookingURL}} class="btn btn-default" role="button" target="new">Booking</a> 
+    <a href={{newsURL}} class="btn btn-default" role="button" target="new">News</a><br/>
     </div>
 {{/with}}
 <div id="eventscontainer">

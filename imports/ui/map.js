@@ -56,7 +56,7 @@ initMap = function() {
             '<p>Review Score: ' + avg +'/5 </p>' +
             '<p>People: ' + latest.people + ' Noise: ' + latest.meanSnd + ' Temperature: ' + latest.temp + '</p>' +
             '<p><a href="'+ data[i].websiteURL + '" class="btn btn-default" role="button" target="new">Website</a>' +
-            '<p>' + '<a href="/details/' + data[i]._id + '">' + 'More Details' +'</a></p>' +
+            '<p><a href="/details/'+ data[i]._id + '" class="btn btn-default" role="button">More Details</a>' +
             '</p>' +
             '</div>'+
             '</div>';
