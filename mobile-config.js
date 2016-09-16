@@ -2,7 +2,7 @@
 // the entire section is optional.
 App.info({
   id: 'com.thingitude.hotspot.audience',
-  version: '0.0.1',
+  version: '0.0.4',
   name: 'Hotspot Audience',
   description: 'Where is hot in Reading right now?',
   author: 'Thingitude Ltd',
@@ -11,6 +11,11 @@ App.info({
 });
 // Set up resources such as icons and launch screens.
 App.icons({
+'android_mdpi':'public/android_mdpi.png',
+'android_hdpi':'public/android_hdpi.png',
+'android_xhdpi':'public/android_xhdpi.png',
+'android_xxhdpi':'public/android_xxhdpi.png',
+'android_xxxhdpi':'public/android_xxxhdpi.png'
 });
 App.launchScreens({
 });

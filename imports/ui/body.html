@@ -56,11 +56,14 @@
     <div class="table">
     <table class="table">
       <thead>
-        <tr><th id="headingName">Name</th><th>Description</th><th id="headingPeople">People</th><th id="headingAvgsound">Avg Sound level</th><th id="headingTemp">Temperature</th><th id="headingRating">Rating</th><th>Details</th></tr>
+        <tr><th id="headingName">Name</th><th>Description</th>
+        <th id="headingPeople" >People</th>
+        <th id="headingAvgsound">Avg Sound level</th><th id="headingTemp">Temperature</th><th id="headingRating">Rating</th><th>Details</th></tr>
       </thead>
       <tbody>
         {{#each venues}}
-          <tr><td>{{name}}</td><td>{{description}}</td>{{>venuesummarytemplatedata}}
+          <tr><td>{{name}}</td><td>{{description}}</td><td>{{people}}</td><td>{{meanSnd}}</td><td>{{temp}}</td>
+          <td> {{#with reviews}}{{> starsRating id='rating2' rating=score size=10}}{{/with}} </td>
             <td>
               <a type="button" class="btn btn-default" href="/details/{{this._id}}">
               <span class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span></a>

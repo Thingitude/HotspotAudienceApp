@@ -7,7 +7,6 @@ import { SensorData } from '../api/datastream.js';
 import { Events } from '../api/events.js';
 import { Reviews } from '../api/reviews.js';
  
-import './venue.js';
 import './body.html';
 import './map.js';
 
@@ -24,6 +23,16 @@ Template.body.onCreated(function bodyOnCreated() {
 });
 
 Template.VenueList.helpers({
+  reviews() {
+    const venueId=this._id;
+    var temp = {score : arrayavg(Reviews.find({"venueId":venueId}).fetch()),
+                reviewcount : Reviews.find().fetch().length};
+    if(isNaN(temp.score))
+      {
+  temp.score = 0;
+      }
+    return temp;
+  },
   venues() {
     if(window.location.href.split('?').length == 2)
     {
@@ -35,16 +44,15 @@ Template.VenueList.helpers({
 			break;
 		case "P":
                         console.log("P");
-			console.log(Venues.find({}, {sort: {"People": 1}}).fetch());
-			return Venues.find({}, {sort: {"People": 1}});
+			return Venues.find({}, {sort: {"people": -1}});
 			break;
 		case "S":
                         console.log("S");
-			return Venues.find({}, {sort: {"meanSnd": 1}});
+			return Venues.find({}, {sort: {"meanSnd": -1}});
 			break;
 		case "T":
 			console.log("T");
-			return Venues.find({}, {sort: {"Temp": 1}});
+			return Venues.find({}, {sort: {"temp": -1}});
 			break;
 		case "R":
      			console.log("R");
@@ -52,7 +60,7 @@ Template.VenueList.helpers({
 			break;
 	}
     }
-    return Venues.find();
+    return Venues.find({}, {sort: {"people": -1}});
   },
   incompleteCount() {
     return Venues.find().count();
@@ -61,24 +69,26 @@ Template.VenueList.helpers({
 
 Template.VenueList.events({
 	'click th#headingName'(event){
-	console.log("SortBy Name");
-	window.location.assign("?N");
+  	console.log("SortBy Name");
+  	window.location.assign("?N");
 	},
-        'click th#headingPeople'(event){
-	console.log("SortBy People");
-        window.location.assign("?P");
+  'click th#headingPeople'(event){
+	  console.log("SortBy People with Gridsorter");
+    window.location.assign("?P");
+    //var data=event.target.getAttribute('data');
+    //ShiraGridSorter.setSort(data);
 	},
-        'click th#headingAvgsound'(event){
-	console.log("SortBy Sound");
-	window.location.assign("?S");
+  'click th#headingAvgsound'(event){
+  	console.log("SortBy Sound");
+	  window.location.assign("?S");
 	},
-        'click th#headingTemp'(event){
-	console.log("SortBy Temp");
-	window.location.assign("?T");
+  'click th#headingTemp'(event){
+  	console.log("SortBy Temp");
+  	window.location.assign("?T");
 	},
-        'click th#headingRating'(event){
-	console.log("SortBy Rating");
-	window.location.assign("?R");
+  'click th#headingRating'(event){
+  	console.log("SortBy Rating");
+	  window.location.assign("?R");
 	}
 });
 
@@ -102,21 +112,6 @@ Template.datapacket.helpers({
   }
 });
 
-Template.venuesummarytemplatedata.helpers({
-  thisVenue() {
-    const venueId=this._id;
-    var array = SensorData.find({"sensorId":Venues.findOne({"_id": venueId}).sensorId}).fetch();
-    var reviewdata = Reviews.find({"venueId":venueId}).fetch();
-    var temp = {data : array[array.length - 1],
-                score : arrayavg(reviewdata),
-                reviewcount : reviewdata.length};
-    if(isNaN(temp.score))
-      {
-	temp.score = 0;
-      }
-    return temp;
-  }
-})
 
 Template.DetailsView.helpers({
   sensorData() {

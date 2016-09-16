@@ -1,6 +1,6 @@
 FlowRouter.route('/', {
   action: function() {
-    BlazeLayout.render("mainLayout", {content: "VenueList"});
+    BlazeLayout.render("mainLayout", {content: "MapView"});
   }
 });
 
@@ -14,7 +14,6 @@ FlowRouter.route('/map', {
 
 FlowRouter.route('/addvenue', {
   action: function() {
-    console.log("AddVenue template");
     BlazeLayout.render("mainLayout", {content: "AddVenue"});
   }
 });
